@@ -10,6 +10,8 @@ env:
   APT: sudo apt -y -qq -o=Dpkg::Use-Pty=0
   LINUX_AMLOGIC_ROOT: /tmp/linux-amlogic
   COMMON_DRIVERS_ROOT: /tmp/linux-amlogic/common_drivers
+  UGOOS_X3_PRO_DTB: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit.dtb
+  MAKE: make -j$(nproc) 
 
 jobs:
   build:
@@ -35,5 +37,15 @@ jobs:
     - name: Make
       run: |
         cd "$LINUX_AMLOGIC_ROOT"
-        make ARCH=arm64 defconfig
+        $MAKE ARCH=arm64 defconfig
+        $MAKE ARCH=arm64 dtbs
+
+    - name: Check
+      run: |
+        cd /tmp/
+        ls -alh "$UGOOS_X3_PRO_DTB"
+        file "$UGOOS_X3_PRO_DTB"
+
+        cd $(dirname "$UGOOS_X3_PRO_DTB")
+        sha256sum -tee $(basename "$UGOOS_X3_PRO_DTB")
     
