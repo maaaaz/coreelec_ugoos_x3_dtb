@@ -5,3 +5,5 @@ This repository compiles a Ugoos X3 DTS file that incorporates **auto power of U
 cf. https://discourse.coreelec.org/t/ugoos-x3-pro-s905x3-cant-enable-usb-ports-after-booting-from-microsd-card/58818
 
 Both DTS and DTB files are published in the [releases section](https://github.com/maaaaz/coreelec_ugoos_x3_dtb/releases)
+
+For reference, debugging or general help, I previously dumped the [DTS and DTB from a live instance of Android 9](https://github.com/maaaaz/coreelec_ugoos_x3_dtb/tree/main/live_dump_from_Android_9) for this box.
