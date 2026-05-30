@@ -26,7 +26,7 @@ jobs:
         du -sh ./linux-amlogic
        
         cd ./linux-amlogic
-        git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" -o coreelec_common_drivers
+        git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" -o common_drivers
         ls -al ./coreelec_common_drivers
         du -sh ./linux-amlogic
     
