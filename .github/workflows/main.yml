@@ -3,14 +3,17 @@ name: Compile DTS to DTB
 on: 
   workflow_dispatch
 
-# permissions:
-#   contents: write
+permissions:
+  contents: write
 
 env:
   APT: sudo apt -y -qq -o=Dpkg::Use-Pty=0
+  GIT_CLONE: git clone --progress=false
   LINUX_AMLOGIC_ROOT: /tmp/linux-amlogic
   COMMON_DRIVERS_ROOT: /tmp/linux-amlogic/common_drivers
+  UGOOS_X3_PRO_DTS: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit.dts
   UGOOS_X3_PRO_DTB: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit.dtb
+  RELEASE_NOTES: /tmp/releasenotes
   
 jobs:
   build:
@@ -24,14 +27,24 @@ jobs:
     - name: Set up environment
       run: |
         cd /tmp/
-        git clone --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" "$LINUX_AMLOGIC_ROOT"
-        ls -al "$LINUX_AMLOGIC_ROOT"
-        du -sh "$LINUX_AMLOGIC_ROOT"
-       
-        cd ./linux-amlogic
-        git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" "$COMMON_DRIVERS_ROOT"
-        ls -al "$COMMON_DRIVERS_ROOT"
-        du -sh "$COMMON_DRIVERS_ROOT"
+        RELEASE_NAME="$(date '+%Y%m%d%S')"
+        echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+        
+        $GIT_CLONE "https://github.com/CoreELEC/linux-amlogic.git" "$LINUX_AMLOGIC_ROOT"
+        
+        cd "$LINUX_AMLOGIC_ROOT"        
+        $GIT_CLONE --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" "$COMMON_DRIVERS_ROOT"
+        
+        ls -al "$LINUX_AMLOGIC_ROOT" && du -sh "$LINUX_AMLOGIC_ROOT"
+        ls -al "$COMMON_DRIVERS_ROOT" && du -sh "$COMMON_DRIVERS_ROOT"
+
+    - name: Show versions
+      run: |
+        cd "$LINUX_AMLOGIC_ROOT"
+        echo -e "linux-amlogic:\t$(git branch --show current)" | tee -a "$RELEASE_NOTES"
+        
+        cd "$COMMON_DRIVERS_ROOT"
+        echo -e "common_drivers:\t$(git branch --show current)" | tee -a "$RELEASE_NOTES"
 
     - name: Make
       run: |
@@ -42,9 +55,22 @@ jobs:
     - name: Check
       run: |
         cd /tmp/
-        ls -alh "$UGOOS_X3_PRO_DTB"
+        ls -al "$UGOOS_X3_PRO_DTB"
         file "$UGOOS_X3_PRO_DTB"
 
         cd $(dirname "$UGOOS_X3_PRO_DTB")
-        sha256sum -tee $(basename "$UGOOS_X3_PRO_DTB")
-    
+        sha256sum --tag $(basename "$UGOOS_X3_PRO_DTB") | tee -a "$RELEASE_NOTES"
+        sha256sum --tag $(basename "$UGOOS_X3_PRO_DTS") | tee -a "$RELEASE_NOTES"
+
+        cat "$RELEASE_NOTES"
+
+    - name: Create a new Github release
+      uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda #v3.0.1
+      with:
+        make_latest: true
+        body_path: ${{ env.RELEASE_NOTES }}
+        name: version ${{ env.RELEASE_NAME }}
+        tag_name: ${{ env.RELEASE_NAME }}
+        files: |
+          ${{ env.UGOOS_X3_PRO_DTB }}
+          ${{ env.UGOOS_X3_PRO_DTS }}
