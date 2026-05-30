@@ -8,7 +8,7 @@ permissions:
 
 env:
   APT: sudo apt -y -qq -o=Dpkg::Use-Pty=0
-  GIT_CLONE: GIT_PROGRESS=0 git clone
+  GIT_CLONE: git clone -q
   LINUX_AMLOGIC_ROOT: /tmp/linux-amlogic
   COMMON_DRIVERS_ROOT: /tmp/linux-amlogic/common_drivers
   UGOOS_X3_PRO_DTS: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit.dts
