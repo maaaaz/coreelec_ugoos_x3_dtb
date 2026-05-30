@@ -15,15 +15,18 @@ jobs:
     steps:
     - name: Install prerequisites
       run: |
-        $APT install build-essential bc bison flex libssl-dev device-tree-compiler
+        $APT update
+        $APT install autoconf build-essential bc bison flex device-tree-compiler
     
     - name: Set up environment
       run: |
         cd /tmp/
         git clone --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" -o linux-amlogic
         ls -al ./linux-amlogic
+        du -sh ./linux-amlogic
+       
         cd ./linux-amlogic
-        
         git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" -o coreelec_common_drivers
         ls -al ./coreelec_common_drivers
+        du -sh ./linux-amlogic
     
