@@ -1,0 +1,1 @@
+# coreelec_ugoos_x3_dtb
