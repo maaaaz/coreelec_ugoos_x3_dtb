@@ -23,12 +23,12 @@ jobs:
     - name: Set up environment
       run: |
         cd /tmp/
-        git clone --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" -o "$LINUX_AMLOGIC_ROOT"
+        git clone --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" "$LINUX_AMLOGIC_ROOT"
         ls -al "$LINUX_AMLOGIC_ROOT"
         du -sh "$LINUX_AMLOGIC_ROOT"
        
         cd ./linux-amlogic
-        git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" -o "$COMMON_DRIVERS_ROOT"
+        git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" "$COMMON_DRIVERS_ROOT"
         ls -al "$COMMON_DRIVERS_ROOT"
         du -sh "$COMMON_DRIVERS_ROOT"
 
