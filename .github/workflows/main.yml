@@ -6,16 +6,24 @@ on:
 # permissions:
 #   contents: write
 
+env:
+  APT: sudo apt -y -qq -o=Dpkg::Use-Pty=0
+
 jobs:
-  build_pkg:
+  build:
     runs-on: ubuntu-latest
     steps:
+    - name: Install prerequisites
+      run: |
+        $APT install build-essential bc bison flex libssl-dev device-tree-compiler
+    
     - name: Set up environment
       run: |
         cd /tmp/
         git clone --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" -o linux-amlogic
-        git clone "https://github.com/maaaaz/coreelec_common_drivers.git" -o coreelec_common_drivers
-
         ls -al ./linux-amlogic
+        cd ./linux-amlogic
+        
+        git clone --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" -o coreelec_common_drivers
         ls -al ./coreelec_common_drivers
     
