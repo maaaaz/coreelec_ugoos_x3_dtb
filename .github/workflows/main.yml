@@ -61,8 +61,6 @@ jobs:
         sha256sum --tag $(basename "$UGOOS_X3_PRO_DTB") | tee -a "$RELEASE_NOTES"
         sha256sum --tag $(basename "$UGOOS_X3_PRO_DTS") | tee -a "$RELEASE_NOTES"
 
-        cat "$RELEASE_NOTES"
-
     - name: Create a new Github release
       uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda #v3.0.1
       with:
