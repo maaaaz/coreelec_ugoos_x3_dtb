@@ -1,0 +1,21 @@
+name: Compile DTS to DTB
+
+on: 
+  workflow_dispatch
+
+# permissions:
+#   contents: write
+
+jobs:
+  build_pkg:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up environment
+      run: |
+        cd /tmp/
+        git clone --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" -o linux-amlogic
+        git clone "https://github.com/maaaaz/coreelec_common_drivers.git" -o coreelec_common_drivers
+
+        ls -al ./linux-amlogic
+        ls -al ./coreelec_common_drivers
+    
