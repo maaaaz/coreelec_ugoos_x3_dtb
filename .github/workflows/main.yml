@@ -84,7 +84,7 @@ jobs:
         make_latest: true
         body_path: ${{ env.RELEASE_NOTES }}
         name: version ${{ env.RELEASE_NAME }}
-        tag_name: ${{ env.RELEASE_NAME }}
+        tag_name: v${{ env.RELEASE_NAME }}
         files: |
           ${{ env.UGOOS_X3_PRO_DTB }}
           ${{ env.UGOOS_X3_PRO_DTS }}
