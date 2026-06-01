@@ -11,6 +11,7 @@ env:
   LINUX_AMLOGIC_ROOT: /tmp/linux-amlogic
   COMMON_DRIVERS_ROOT: /tmp/linux-amlogic/common_drivers
   UGOOS_X3_PRO_DTS: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit.dts
+  UGOOS_X3_PRO_DTS_FULL: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit_full.dts
   UGOOS_X3_PRO_DTB: /tmp/linux-amlogic/common_drivers/arch/arm64/boot/dts/amlogic/sm1_s905x3_ugoos_x3_pro_4g_1gbit.dtb
   RELEASE_NOTES: /tmp/releasenotes
   
@@ -48,11 +49,16 @@ jobs:
         cd "$COMMON_DRIVERS_ROOT"
         echo -e "common_drivers:\t$(git branch --show current)" | tee -a "$RELEASE_NOTES"
 
-    - name: Make
+    - name: Make DTBs
       run: |
         cd "$LINUX_AMLOGIC_ROOT"
         make -j$(nproc) ARCH=arm64 defconfig
         make -j$(nproc) ARCH=arm64 dtbs
+
+    - name: Concatenate full DTS
+      run: |
+        cd /tmp/
+        cpp -nostdinc -undef -x assembler-with-cpp -I "$LINUX_AMLOGIC_ROOT/include" -I "$COMMON_DRIVERS_ROOT/include" "$UGOOS_X3_PRO_DTS" > "$UGOOS_X3_PRO_DTS_FULL"
 
     - name: Check
       run: |
@@ -63,6 +69,7 @@ jobs:
         cd $(dirname "$UGOOS_X3_PRO_DTB")
         sha256sum --tag $(basename "$UGOOS_X3_PRO_DTB") | tee -a "$RELEASE_NOTES"
         sha256sum --tag $(basename "$UGOOS_X3_PRO_DTS") | tee -a "$RELEASE_NOTES"
+        sha256sum --tag $(basename "$UGOOS_X3_PRO_DTS_FULL") | tee -a "$RELEASE_NOTES"
 
     - name: Create a new Github release
       uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda #v3.0.1
@@ -74,3 +81,4 @@ jobs:
         files: |
           ${{ env.UGOOS_X3_PRO_DTB }}
           ${{ env.UGOOS_X3_PRO_DTS }}
+          ${{ env.UGOOS_X3_PRO_DTS_FULL }}
