@@ -34,7 +34,7 @@ jobs:
         git clone -q --depth=1 "https://github.com/CoreELEC/linux-amlogic.git" "$LINUX_AMLOGIC_ROOT"
         
         cd "$LINUX_AMLOGIC_ROOT"        
-        git clone -q --depth=1 "https://github.com/maaaaz/coreelec_common_drivers.git" "$COMMON_DRIVERS_ROOT"
+        git clone -q --depth=1 -b mybranch "5.15.170_202508" --single-branch "https://github.com/maaaaz/coreelec_common_drivers.git" "$COMMON_DRIVERS_ROOT"
         
         ls -al "$LINUX_AMLOGIC_ROOT"
         ls -al "$COMMON_DRIVERS_ROOT"
