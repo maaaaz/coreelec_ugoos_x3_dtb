@@ -28,7 +28,7 @@ jobs:
     - name: Set up environment
       run: |
         cd /tmp/
-        RELEASE_NAME="$(date '+%Y%m%d%S')"
+        RELEASE_NAME="$(date '+%Y%m%d%H%m%S')"
         echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
         
         git clone -q --depth=1 -b "5.15.196_20260225" --single-branch "https://github.com/CoreELEC/linux-amlogic.git" "$LINUX_AMLOGIC_ROOT"
