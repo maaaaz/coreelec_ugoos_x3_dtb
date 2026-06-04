@@ -1,5 +1,5 @@
-CoreElec Ugoos X3 DTS and DTB files to auto power USB ports
------------------------------------------------------------
+CoreElec Ugoos X3 DTS and DTB files
+------------------------------------
 
 This repository compiles a Ugoos X3 DTS file that incorporates **auto power of USB ports when booting from MicroSD card**:  
 cf. https://discourse.coreelec.org/t/ugoos-x3-pro-s905x3-cant-enable-usb-ports-after-booting-from-microsd-card/58818  
